@@ -12,8 +12,19 @@ repositories {
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
-}
 
-test {
-    useJUnitPlatform()
+    implementation 'io.netty:netty-all:4.1.86.Final'
+    //Add dependencies and swagger, lombok
+    implementation 'org.projectlombok:lombok:1.18.20'
+    annotationProcessor 'org.projectlombok:lombok:1.18.20'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    implementation group: 'io.swagger.core.v3', name: 'swagger-core', version: '2.2.15' // Update to the latest version
+    implementation group: 'io.swagger.core.v3', name: 'swagger-jaxrs2', version: '2.2.15' // Update to the latest version
+    implementation group: 'io.swagger.core.v3', name: 'swagger-annotations', version: '2.2.15' // Update to the latest version
+
+    //add slf4j
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.7'
+    implementation group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.7'
+
+
 }
