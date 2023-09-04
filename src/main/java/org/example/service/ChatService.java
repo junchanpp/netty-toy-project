@@ -18,12 +18,20 @@ public enum ChatService {
   public void connect(ConnectCommand connectCommand, Channel channel) {
     var roomIds = connectCommand.getRoomIds();
     var userId = connectCommand.getUserId();
+
+    this.addChannel(channel, roomIds);
+
+    this.noticeActiveUser(userId, roomIds);
+
+    this.closeChannelListener(channel, roomIds);
+  }
+  private void addChannel(Channel channel, List<Integer> roomIds) {
     roomIds.forEach(roomId -> {
       var channelSet = this.channels.get(roomId);
 
       if (channelSet == null) {
         channelSet = new HashSet<Channel>();
-        Set<Channel> prevChannels = channels.putIfAbsent(roomId, channelSet);
+        Set<Channel> prevChannels = this.channels.putIfAbsent(roomId, channelSet);
         if (prevChannels != null) {
           channelSet = prevChannels;
         }
@@ -31,17 +39,24 @@ public enum ChatService {
 
       channelSet.add(channel);
     });
+  }
+
+  private void closeChannelListener(Channel channel, List<Integer> roomIds) {
     channel.closeFuture().addListener((ChannelFutureListener) future -> roomIds.forEach(roomId -> {
       channels.get(roomId).remove(channel);
     }));
+  }
+
+  private void noticeActiveUser(int newUserId, List<Integer> roomIds) {
     roomIds.forEach(roomId -> {
       var channelSets = channels.get(roomId);
       channelSets.forEach(channelSet -> {
         channelSet.writeAndFlush(
-            new TextWebSocketFrame("User " + userId + " joined room " + roomId));
+            new TextWebSocketFrame("User " + newUserId + " joined room " + roomId));
       });
     });
   }
+
 
   public void disconnect(List<Integer> roomIds, Channel channel) {
     channel.close();
