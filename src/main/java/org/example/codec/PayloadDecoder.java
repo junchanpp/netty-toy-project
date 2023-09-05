@@ -24,6 +24,5 @@ public class PayloadDecoder extends MessageToMessageDecoder<WebSocketFrame> {
       Payload payload = MapperUtil.readValueOrThrow(msg, Payload.class);
       out.add(payload);
     }
-
   }
 }

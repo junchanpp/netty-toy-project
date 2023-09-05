@@ -6,7 +6,7 @@ import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.codec.http.websocketx.extensions.compression.WebSocketServerCompressionHandler;
-import org.example.codec.WebSocketProtocolCodec;
+import org.example.handler.HandshakeCompleteEventHandler;
 
 public class WebSocketServerInitializer extends ChannelInitializer<SocketChannel> {
 
@@ -19,6 +19,6 @@ public class WebSocketServerInitializer extends ChannelInitializer<SocketChannel
         .addLast(new HttpObjectAggregator(65536))
         .addLast(new WebSocketServerCompressionHandler())
         .addLast(new WebSocketServerProtocolHandler(WEBSOCKET_PATH, null, true))
-        .addLast(new WebSocketProtocolCodec());
+        .addLast(new HandshakeCompleteEventHandler());
   }
 }
