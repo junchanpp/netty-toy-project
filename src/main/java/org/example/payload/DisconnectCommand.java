@@ -13,6 +13,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @JsonTypeName("disconnectCommand")
 public class DisconnectCommand implements Command {
-    private int userId;
-    private List<Integer> roomId;
+
+  private int userId;
+  private List<Integer> roomId;
 }

@@ -12,6 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @JsonTypeName("leaveRoomCommand")
 public class LeaveRoomCommand implements Command {
+
   private int userId;
   private int roomId;
 }

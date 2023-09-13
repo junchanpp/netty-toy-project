@@ -4,7 +4,6 @@ import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.payload.ConnectCommand;
 import org.example.payload.DisconnectCommand;
@@ -13,7 +12,6 @@ import org.example.payload.LeaveRoomCommand;
 import org.example.payload.Payload;
 import org.example.payload.SendCommand;
 import org.example.service.ChatService;
-import org.example.service.ChatServiceImpl;
 import org.example.util.MapperUtil;
 
 @AllArgsConstructor

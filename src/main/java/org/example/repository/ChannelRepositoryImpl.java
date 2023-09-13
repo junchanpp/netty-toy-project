@@ -2,12 +2,10 @@ package org.example.repository;
 
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import org.example.payload.Command;
 
 public enum ChannelRepositoryImpl implements ChannelRepository {
   INSTANCE();

@@ -9,6 +9,7 @@ import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 
 public final class WebSocketServer {
+
   private static final int PORT = Integer.parseInt(System.getProperty("port", "8080"));
 
   public void run() throws Exception {
@@ -19,7 +20,7 @@ public final class WebSocketServer {
       b.group(bossGroup, workerGroup)
           .channel(NioServerSocketChannel.class)
           .handler(new LoggingHandler(LogLevel.INFO))
-        .childHandler(new WebSocketServerInitializer());
+          .childHandler(new WebSocketServerInitializer());
 
       Channel ch = b.bind(PORT).sync().channel();
 

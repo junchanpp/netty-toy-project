@@ -14,6 +14,7 @@ import org.example.repository.ChannelRepositoryImpl;
 public enum ChatServiceImpl implements ChatService {
   INSTANCE();
   private final ChannelRepository channelRepository = ChannelRepositoryImpl.INSTANCE;
+
   @Override
   public void connect(ConnectCommand connectCommand, Channel channel) {
     var roomIds = connectCommand.getRoomIds();

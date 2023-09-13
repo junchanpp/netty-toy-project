@@ -12,6 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @JsonTypeName("joinCommand")
 public class JoinRoomCommand {
+
   private int userId;
   private int roomId;
 }
