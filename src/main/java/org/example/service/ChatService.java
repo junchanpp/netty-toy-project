@@ -1,64 +1,17 @@
 package org.example.service;
 
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelFutureListener;
-import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import org.example.payload.ConnectCommand;
+import org.example.payload.DisconnectCommand;
+import org.example.payload.JoinRoomCommand;
+import org.example.payload.LeaveRoomCommand;
+import org.example.payload.SendCommand;
 
+public interface ChatService {
+  public void connect(ConnectCommand connectCommand, Channel channel);
+  public void disconnect(DisconnectCommand disConnectCommand, Channel channel);
 
-public enum ChatService {
-  INSTANCE();
-  private final ConcurrentMap<Integer, Set<Channel>> channels = new ConcurrentHashMap<Integer, Set<Channel>>();
-
-  public void connect(ConnectCommand connectCommand, Channel channel) {
-    var roomIds = connectCommand.getRoomIds();
-    var userId = connectCommand.getUserId();
-
-    this.addChannel(channel, roomIds);
-
-    this.noticeActiveUser(userId, roomIds);
-
-    this.closeChannelListener(channel, roomIds);
-  }
-  private void addChannel(Channel channel, List<Integer> roomIds) {
-    roomIds.forEach(roomId -> {
-      var channelSet = this.channels.get(roomId);
-
-      if (channelSet == null) {
-        channelSet = new HashSet<Channel>();
-        Set<Channel> prevChannels = this.channels.putIfAbsent(roomId, channelSet);
-        if (prevChannels != null) {
-          channelSet = prevChannels;
-        }
-      }
-
-      channelSet.add(channel);
-    });
-  }
-
-  private void closeChannelListener(Channel channel, List<Integer> roomIds) {
-    channel.closeFuture().addListener((ChannelFutureListener) future -> roomIds.forEach(roomId -> {
-      channels.get(roomId).remove(channel);
-    }));
-  }
-
-  private void noticeActiveUser(int newUserId, List<Integer> roomIds) {
-    roomIds.forEach(roomId -> {
-      var channelSets = channels.get(roomId);
-      channelSets.forEach(channelSet -> {
-        channelSet.writeAndFlush(
-            new TextWebSocketFrame("User " + newUserId + " joined room " + roomId));
-      });
-    });
-  }
-
-
-  public void disconnect(List<Integer> roomIds, Channel channel) {
-    channel.close();
-  }
+  public void joinRoom(JoinRoomCommand joinRoomCommand, Channel channel);
+  public void leaveRoom(LeaveRoomCommand leaveRoomCommand, Channel channel);
+  public void send(SendCommand sendCommand);
 }

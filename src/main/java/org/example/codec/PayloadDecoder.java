@@ -23,6 +23,9 @@ public class PayloadDecoder extends MessageToMessageDecoder<WebSocketFrame> {
       String msg = ((TextWebSocketFrame) frame).text();
       Payload payload = MapperUtil.readValueOrThrow(msg, Payload.class);
       out.add(payload);
+    } else {
+      String message = "unsupported frame type: " + frame.getClass().getName();
+      throw new UnsupportedOperationException(message);
     }
   }
 }
