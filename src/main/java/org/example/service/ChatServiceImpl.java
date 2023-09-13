@@ -2,18 +2,27 @@ package org.example.service;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
-import org.example.payload.ConnectCommand;
-import org.example.payload.DisconnectCommand;
-import org.example.payload.JoinRoomCommand;
-import org.example.payload.LeaveRoomCommand;
-import org.example.payload.SendCommand;
+import java.util.List;
+import javax.swing.text.Document;
+import org.example.payload.command.ConnectCommand;
+import org.example.payload.command.DisconnectCommand;
+import org.example.payload.command.JoinRoomCommand;
+import org.example.payload.command.LeaveRoomCommand;
+import org.example.payload.command.ReceiveCommand;
+import org.example.payload.command.SendCommand;
 import org.example.repository.ChannelRepository;
 import org.example.repository.ChannelRepositoryImpl;
+import org.example.repository.ChatRepository;
+import org.example.repository.ChatRepositoryImpl;
+import org.example.util.SubscriberHelpers.ObservableSubscriber;
+import org.example.util.SubscriberHelpers.PrintDocumentSubscriber;
+import org.reactivestreams.Subscriber;
 
 
 public enum ChatServiceImpl implements ChatService {
   INSTANCE();
   private final ChannelRepository channelRepository = ChannelRepositoryImpl.INSTANCE;
+  private final ChatRepository chatRepository = ChatRepositoryImpl.INSTANCE;
 
   @Override
   public void connect(ConnectCommand connectCommand, Channel channel) {
@@ -37,15 +46,15 @@ public enum ChatServiceImpl implements ChatService {
 
   @Override
   public void send(SendCommand sendCommand) {
-    System.out.println("send");
     this.channelRepository.send(sendCommand.getRoomId(), sendCommand.getMessage());
+    this.chatRepository.sendMessage(sendCommand.getRoomId(), sendCommand.getUserId(), sendCommand.getMessage());
   }
 
   @Override
   public void joinRoom(JoinRoomCommand joinRoomCommand, Channel channel) {
     var roomId = joinRoomCommand.getRoomId();
     this.channelRepository.put(roomId, channel);
-    System.out.println("joinRoom: " + roomId);
+    this.chatRepository.joinRoom(roomId, joinRoomCommand.getUserId());
 
     channel.closeFuture().addListener((ChannelFutureListener) future -> {
       this.channelRepository.remove(roomId, channel);
@@ -55,7 +64,13 @@ public enum ChatServiceImpl implements ChatService {
   @Override
   public void leaveRoom(LeaveRoomCommand leaveRoomCommand, Channel channel) {
     var roomId = leaveRoomCommand.getRoomId();
-    System.out.println("leaveRoom: " + roomId);
+
     this.channelRepository.remove(roomId, channel);
+    this.chatRepository.leaveRoom(roomId, leaveRoomCommand.getUserId());
+  }
+
+  @Override
+  public void getMessageHistory(Integer roomId, Channel channel) {
+    this.chatRepository.getChatHistory(roomId).subscribe(new PrintDocumentSubscriber());
   }
 }

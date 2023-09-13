@@ -7,6 +7,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import org.example.config.MongoDBConfig;
 
 public final class WebSocketServer {
 
@@ -30,7 +31,6 @@ public final class WebSocketServer {
       workerGroup.shutdownGracefully();
     }
   }
-
 
   public static void main(String[] args) throws Exception {
     new WebSocketServer().run();

@@ -5,12 +5,12 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.payload.ConnectCommand;
-import org.example.payload.DisconnectCommand;
-import org.example.payload.JoinRoomCommand;
-import org.example.payload.LeaveRoomCommand;
+import org.example.payload.command.ConnectCommand;
+import org.example.payload.command.DisconnectCommand;
+import org.example.payload.command.JoinRoomCommand;
+import org.example.payload.command.LeaveRoomCommand;
 import org.example.payload.Payload;
-import org.example.payload.SendCommand;
+import org.example.payload.command.SendCommand;
 import org.example.service.ChatService;
 import org.example.util.MapperUtil;
 
@@ -42,6 +42,7 @@ public class CommandHandler extends SimpleChannelInboundHandler<Payload> {
       case JOIN_ROOM -> {
         var joinRoomCommand = MapperUtil.readValueOrThrow(payload.getBody(), JoinRoomCommand.class);
         chatService.joinRoom(joinRoomCommand, ctx.channel());
+        chatService.getMessageHistory(joinRoomCommand.getRoomId(), ctx.channel());
       }
       case LEAVE_ROOM -> {
         var leaveRoomCommand = MapperUtil.readValueOrThrow(payload.getBody(),

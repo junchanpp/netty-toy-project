@@ -1,11 +1,13 @@
 package org.example.service;
 
 import io.netty.channel.Channel;
-import org.example.payload.ConnectCommand;
-import org.example.payload.DisconnectCommand;
-import org.example.payload.JoinRoomCommand;
-import org.example.payload.LeaveRoomCommand;
-import org.example.payload.SendCommand;
+import java.util.List;
+import org.example.payload.command.ConnectCommand;
+import org.example.payload.command.DisconnectCommand;
+import org.example.payload.command.JoinRoomCommand;
+import org.example.payload.command.LeaveRoomCommand;
+import org.example.payload.command.ReceiveCommand;
+import org.example.payload.command.SendCommand;
 
 public interface ChatService {
 
@@ -16,6 +18,8 @@ public interface ChatService {
   void joinRoom(JoinRoomCommand joinRoomCommand, Channel channel);
 
   void leaveRoom(LeaveRoomCommand leaveRoomCommand, Channel channel);
+
+  void getMessageHistory(Integer roomId, Channel channel);
 
   void send(SendCommand sendCommand);
 }

@@ -1,7 +1,6 @@
-package org.example.payload;
+package org.example.payload.command;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.io.Serializable;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,9 +11,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonTypeName("connectCommand")
-public class ConnectCommand implements Command, Serializable {
+@JsonTypeName("disconnectCommand")
+public class DisconnectCommand implements Command {
 
   private int userId;
-  private List<Integer> roomIds;
+  private List<Integer> roomId;
 }

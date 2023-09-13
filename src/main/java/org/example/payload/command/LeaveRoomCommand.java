@@ -1,4 +1,4 @@
-package org.example.payload;
+package org.example.payload.command;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.AllArgsConstructor;
@@ -10,10 +10,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonTypeName("sendCommand")
-public class SendCommand implements Command {
+@JsonTypeName("leaveRoomCommand")
+public class LeaveRoomCommand implements Command {
 
   private int userId;
   private int roomId;
-  private String message;
 }

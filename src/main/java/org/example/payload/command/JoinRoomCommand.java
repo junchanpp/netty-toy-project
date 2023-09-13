@@ -1,4 +1,4 @@
-package org.example.payload;
+package org.example.payload.command;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.AllArgsConstructor;
